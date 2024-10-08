@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Add Rake Sample Analysis</title>
+    <script>
+        function showExistingData() {
+            const data = {{ existing_data|tojson | safe }};
+            if (data && data.analysis) {
+                alert(`Existing Data:\nInherent Moisture: ${data.analysis.inherent_moisture || 'N/A'}\nGCV (ADB): ${data.analysis.gcv_adb || 'N/A'}\nGCV (ARB): ${data.analysis.gcv_arb || 'N/A'}\nTotal Moisture: ${data.analysis.total_moisture || 'N/A'}\nVolatile Matter: ${data.analysis.volatile_matter || 'N/A'}\nAsh: ${data.analysis.ash || 'N/A'}\nFixed Carbon: ${data.analysis.fixed_carbon || 'N/A'}`);
+            }
+        }
+    </script>
+</head>
+<body onload="showExistingData()" class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold">Add Rake Sample Analysis for Sample ID: {{ sample_id }}</h1>
+
+        <form method="POST" action="{{ url_for('submit_rake_sample_analysis', sample_id=sample_id) }}">
+            <label>Inherent Moisture:</label>
+            <input type="number" step="any" name="inherent_moisture" class="border p-2 w-full mb-2" value="{{ existing_data['analysis'].get('inherent_moisture', '') if existing_data and 'analysis' in existing_data else '' }}">
+            <label>GCV (ADB):</label>
+            <input type="number" step="any" name="gcv_adb" class="border p-2 w-full mb-2" value="{{ existing_data['analysis'].get('gcv_adb', '') if existing_data and 'analysis' in existing_data else '' }}">
+            <label>GCV (ARB):</label>
+            <input type="number" step="any" name="gcv_arb" class="border p-2 w-full mb-2" value="{{ existing_data['analysis'].get('gcv_arb', '') if existing_data and 'analysis' in existing_data else '' }}">
+            <label>Total Moisture:</label>
+            <input type="number" step="any" name="total_moisture" class="border p-2 w-full mb-2" value="{{ existing_data['analysis'].get('total_moisture', '') if existing_data and 'analysis' in existing_data else '' }}">
+            <label>Volatile Matter (ADB):</label>
+            <input type="number" step="any" name="volatile_matter" class="border p-2 w-full mb-2" value="{{ existing_data['analysis'].get('volatile_matter', '') if existing_data and 'analysis' in existing_data else '' }}">
+            <label>Ash:</label>
+            <input type="number" step="any" name="ash" class="border p-2 w-full mb-2" value="{{ existing_data['analysis'].get('ash', '') if existing_data and 'analysis' in existing_data else '' }}">
+            <label>Fixed Carbon (ADB):</label>
+            <input type="number" step="any" name="fixed_carbon" class="border p-2 w-full mb-2" value="{{ existing_data['analysis'].get('fixed_carbon', '') if existing_data and 'analysis' in existing_data else '' }}">
+
+            <button type="submit" class="bg-blue-500 text-white p-2 rounded">Submit Analysis</button>
+        </form>
+    </div>
+</body>
+</html>

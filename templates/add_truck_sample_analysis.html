@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Add Truck Sample Analysis</title>
+    <script>
+        function showExistingData() {
+            const data = {{ existing_data|tojson | safe }};
+            if (data && (data.analysis_cpp || data.analysis_ccr)) {
+                const analysis = data.analysis_cpp || data.analysis_ccr || {};
+                alert(`Existing Data:\nInherent Moisture: ${analysis.inherent_moisture || 'N/A'}\nGCV (ADB): ${analysis.gcv_adb || 'N/A'}\nGCV (ARB): ${analysis.gcv_arb || 'N/A'}\nTotal Moisture: ${analysis.total_moisture || 'N/A'}\nVolatile Matter: ${analysis.volatile_matter || 'N/A'}\nAsh: ${analysis.ash || 'N/A'}\nFixed Carbon: ${analysis.fixed_carbon || 'N/A'}`);
+            }
+        }
+    </script>
+</head>
+<body onload="showExistingData()" class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold">Add Truck Sample Analysis for Sample ID: {{ sample_id }}</h1>
+
+        <form method="POST" action="{{ url_for('submit_truck_sample_analysis', sample_id=sample_id) }}">
+            <label>Inherent Moisture:</label>
+            <input type="number" step="any" name="inherent_moisture" class="border p-2 w-full mb-2" 
+                   value="{{ existing_data.get('analysis_cpp', {}).get('inherent_moisture', '') }}">
+            <label>GCV (ADB):</label>
+            <input type="number" step="any" name="gcv_adb" class="border p-2 w-full mb-2" 
+                   value="{{ existing_data.get('analysis_cpp', {}).get('gcv_adb', '') }}">
+            <label>GCV (ARB):</label>
+            <input type="number" step="any" name="gcv_arb" class="border p-2 w-full mb-2" 
+                   value="{{ existing_data.get('analysis_cpp', {}).get('gcv_arb', '') }}">
+            <label>Total Moisture:</label>
+            <input type="number" step="any" name="total_moisture" class="border p-2 w-full mb-2" 
+                   value="{{ existing_data.get('analysis_cpp', {}).get('total_moisture', '') }}">
+            <label>Volatile Matter (ADB):</label>
+            <input type="number" step="any" name="volatile_matter" class="border p-2 w-full mb-2" 
+                   value="{{ existing_data.get('analysis_cpp', {}).get('volatile_matter', '') }}">
+            <label>Ash:</label>
+            <input type="number" step="any" name="ash" class="border p-2 w-full mb-2" 
+                   value="{{ existing_data.get('analysis_cpp', {}).get('ash', '') }}">
+            <label>Fixed Carbon (ADB):</label>
+            <input type="number" step="any" name="fixed_carbon" class="border p-2 w-full mb-2" 
+                   value="{{ existing_data.get('analysis_cpp', {}).get('fixed_carbon', '') }}">
+
+            <button type="submit" class="bg-blue-500 text-white p-2 rounded">Submit Analysis</button>
+        </form>
+    </div>
+</body>
+</html>

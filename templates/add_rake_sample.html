@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Add Rake Sample</title>
+</head>
+<body class="bg-gray-100">
+    {% if current_user.is_authenticated %}
+    <a class="p-4 text-center text-black-300">
+        Welcome, {{ current_user.first_name }} {{ current_user.last_name }}!
+    </a>
+{% endif %}
+    <div class="flex">
+        <nav class="bg-gray-800 text-white w-64 h-screen">
+            <ul class="space-y-2 p-4">
+                <li><a href="{{ url_for('add_truck_sample') }}" class="block p-2 hover:bg-gray-700">Add Truck Sample</a></li>
+                <li><a href="{{ url_for('add_rake_sample') }}" class="block p-2 hover:bg-gray-700">Add Rake Sample</a></li>
+                <li><a href="{{ url_for('view_truck_samples') }}" class="block p-2 hover:bg-gray-700">View Truck Samples</a></li>
+                <li><a href="{{ url_for('view_rake_samples') }}" class="block p-2 hover:bg-gray-700">View Rake Samples</a></li>
+                <li><a href="{{ url_for('view_users') }}" class="block p-2 hover:bg-gray-700">View Users</a></li>
+                <li>
+                    <a href="{{ url_for('logout') }}" class="flex items-center p-2 hover:bg-gray-700">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                    </a>
+                </li>
+            </ul>
+          
+        </nav>
+     
+        
+        <div class="flex-1 p-4">
+            <h1 class="text-2xl font-bold text-center text-white bg-gray-800 p-4">Add Rake Sample</h1>
+
+            <form action="" method="post" class="space-y-4 mt-4">
+                <div>
+                    <label for="date_time" class="block text-lg font-bold">Date and Time:</label>
+                    <input type="datetime-local" id="date_time" name="date_time" class="p-2 border rounded w-full">
+                </div>
+
+                <div>
+                    <label for="rr_no" class="block text-lg font-bold">RR No:</label>
+                    <input type="text" id="rr_no" name="rr_no" class="p-2 border rounded w-full">
+                </div>
+
+                <div>
+                    <label for="supplier" class="block text-lg font-bold">Supplier:</label>
+                    <input type="text" id="supplier" name="supplier" class="p-2 border rounded w-full">
+                </div>
+
+                <div>
+                    <label for="quantity" class="block text-lg font-bold">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity" class="p-2 border rounded w-full">
+                </div>
+
+                <button type="submit" class="bg-blue-500 text-white p-2 rounded">Add Sample</button>
+            </form>
+        </div>
+   
+    </div>
+  
+</div>
+</body>
+
+</html>

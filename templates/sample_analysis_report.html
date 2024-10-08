@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Analysis Report</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-4">
+    <div class="max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-4">
+        <h1 class="text-2xl font-bold mb-4">Sample Analysis Report for Sample ID: {{ analysis.sample_id }}</h1>
+
+        {% if analysis %}
+            <table class="min-w-full border border-gray-300 mt-4">
+                <thead>
+                    <tr>
+                        <th class="border px-4 py-2" scope="col">Property</th>
+                        <th class="border px-4 py-2" scope="col">Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if user_role == 'cpp_user' %}
+                        <tr>
+                            <td class="border px-4 py-2">Total Moisture</td>
+                            <td class="border px-4 py-2">{{ analysis.total_moisture | default('N/A') }}</td>
+                        </tr>
+                        <tr>
+                            <td class="border px-4 py-2">Volatile Matter (ADB)</td>
+                            <td class="border px-4 py-2">{{ analysis.volatile_matter | default('N/A') }}</td>
+                        </tr>
+                        <tr>
+                            <td class="border px-4 py-2">Ash</td>
+                            <td class="border px-4 py-2">{{ analysis.ash | default('N/A') }}</td>
+                        </tr>
+                        <tr>
+                            <td class="border px-4 py-2">Fixed Carbon (ADB)</td>
+                            <td class="border px-4 py-2">{{ analysis.fixed_carbon | default('N/A') }}</td>
+                        </tr>
+                    {% elif user_role == 'ccr_user' %}
+                        <tr>
+                            <td class="border px-4 py-2">GCV (ADB)</td>
+                            <td class="border px-4 py-2">{{ analysis.gcv_adb | default('N/A') }}</td>
+                        </tr>
+                        <tr>
+                            <td class="border px-4 py-2">GCV (ARB)</td>
+                            <td class="border px-4 py-2">{{ analysis.gcv_arb | default('N/A') }}</td>
+                        </tr>
+                    {% endif %}
+                    <tr>
+                        <td class="border px-4 py-2">Created At</td>
+                        <td class="border px-4 py-2">{{ analysis.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="mt-4">
+                <a href="{{ url_for('add_sample_analysis', sample_type='truck', sample_id=analysis.sample_id) }}" class="bg-blue-500 text-white p-2 rounded">Add New Analysis for Truck</a>
+                <a href="{{ url_for('add_sample_analysis', sample_type='rake', sample_id=analysis.sample_id) }}" class="bg-blue-500 text-white p-2 rounded">Add New Analysis for Rake</a>
+            </div>
+        {% else %}
+            <p class="text-center text-red-500">No analysis data found for this sample ID.</p>
+        {% endif %}
+        
+        <div class="mt-4">
+            <a href="{{ url_for('view_rake_samples') }}" class="bg-gray-300 text-black p-2 rounded">Back to Rake Samples</a>
+        </div>
+    </div>
+</body>
+</html>

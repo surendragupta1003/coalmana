@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Truck Samples</title>
+    <style>
+        @media print {
+            #print-area {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    {% if current_user.is_authenticated %}
+    <a class="p-4 text-center text-black-300">
+        Welcome, {{ current_user.first_name }} {{ current_user.last_name }}!
+    </a>
+    {% endif %}
+    <div class="flex">
+        <nav class="bg-gray-800 text-white w-64 h-screen">
+            <ul class="space-y-2 p-4">
+                <li><a href="{{ url_for('add_truck_sample') }}" class="block p-2 hover:bg-gray-700">Add Truck Sample</a></li>
+                <li><a href="{{ url_for('add_rake_sample') }}" class="block p-2 hover:bg-gray-700">Add Rake Sample</a></li>
+                <li><a href="{{ url_for('view_truck_samples') }}" class="block p-2 hover:bg-gray-700">View Truck Samples</a></li>
+                <li><a href="{{ url_for('view_rake_samples') }}" class="block p-2 hover:bg-gray-700">View Rake Samples</a></li>
+                <li><a href="{{ url_for('view_users') }}" class="block p-2 hover:bg-gray-700">View Users</a></li>
+                <li><a href="{{ url_for('logout') }}" class="flex items-center p-2 hover:bg-gray-700">
+                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                </a></li>
+            </ul>
+        </nav>
+        <div class="flex-1 p-4">
+            <h1 class="text-2xl font-bold text-center text-white bg-gray-800 p-4">Truck Samples</h1>
+
+            <button onclick="printLabels()" class="bg-green-500 text-white p-2 rounded mt-4">Print Labels</button>
+
+            <script>
+            function printLabels() {
+                var printArea = document.getElementById('print-area');
+                var printWindow = window.open('', '_blank');
+                
+                printWindow.document.write('<html><head><title>Print Labels</title></head><body>');
+                printWindow.document.write(printArea.innerHTML);
+                printWindow.document.write('</body></html>');
+                printWindow.document.close();
+                printWindow.print();
+            }
+            </script>
+
+            <table class="min-w-full border border-gray-300 mt-4">
+                <thead>
+                    <tr>
+                        <th class="border px-4 py-2">Sample ID</th>
+                        <th class="border px-4 py-2">Date and Time</th>
+                        <th class="border px-4 py-2">Transporter Name</th>
+                        <th class="border px-4 py-2">Supplier</th>
+                        <th class="border px-4 py-2">Quantity</th>
+                        <th class="border px-4 py-2">QR Code</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if samples %}
+                        {% for sample in samples %}
+                        <tr class="text-center">
+                            <td class="border px-4 py-2">{{ sample.sample_id }}</td>
+                            <td class="border px-4 py-2">{{ sample.date_time }}</td>
+                            <td class="border px-4 py-2">{{ sample.transporter_name }}</td>
+                            <td class="border px-4 py-2">{{ sample.supplier }}</td>
+                            <td class="border px-4 py-2">{{ sample.quantity }}</td>
+                            <td class="border px-4 py-2">
+                                <a href="{{ url_for('generate_qr_code', sample_type='truck', sample_id=sample.sample_id, format='png') }}" class="text-blue-500 hover:underline">Download PNG</a> |
+                                <a href="{{ url_for('generate_qr_code', sample_type='truck', sample_id=sample.sample_id, format='pdf') }}" class="text-blue-500 hover:underline">Download PDF</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="6" class="text-center">No samples available.</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+
+            <div class="mt-4">
+                <h2 class="text-lg font-semibold">Printing Options</h2>
+                <p>Choose the number of prints:</p>
+                <form action="{{ url_for('print_labels') }}" method="post" class="space-x-4 mt-2">
+                    <select name="number_of_prints" class="p-2 border rounded">
+                        <option value="1">1 Print</option>
+                        <option value="2">2 Prints</option>
+                        <option value="3">3 Prints</option>
+                        <option value="4">4 Prints</option>
+                        <option value="5">5 Prints</option>
+                    </select>
+            
+                    <div class="mt-2">
+                        <h3 class="font-semibold">Select Samples to Print:</h3>
+                        {% for sample in samples %}
+                        <div>
+                            <input type="checkbox" name="sample_ids" value="{{ sample.sample_id }}">
+                            {{ sample.sample_id }}
+                        </div>
+                        {% endfor %}
+                    </div>
+            
+                    <button type="submit" class="bg-blue-500 text-white p-2 rounded">Print Labels</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

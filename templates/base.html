@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMyD0F1i3AtgHeEIdl1EyZl4dZ8g1+I64JwlD" crossorigin="anonymous">
+    <title>{% block title %}Form{% endblock %}</title>
+</head>
+<body class="bg-gray-100">
+    <div class="flex">
+        <nav class="bg-gray-800 text-white w-64 h-screen">
+            <ul class="space-y-2 p-4">
+                <li>
+                    <a href="{{ url_for('add_truck_sample') }}" class="flex items-center p-2 hover:bg-gray-700">
+                        <i class="fas fa-truck mr-2"></i> Add Truck Sample
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('add_rake_sample') }}" class="flex items-center p-2 hover:bg-gray-700">
+                        <i class="fas fa-ship mr-2"></i> Add Rake Sample
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('view_truck_samples') }}" class="flex items-center p-2 hover:bg-gray-700">
+                        <i class="fas fa-eye mr-2"></i> View Truck Samples
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('view_rake_samples') }}" class="flex items-center p-2 hover:bg-gray-700">
+                        <i class="fas fa-eye mr-2"></i> View Rake Samples
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('logout') }}" class="flex items-center p-2 hover:bg-gray-700">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                    </a>
+                </li>
+            </ul>
+            {% if current_user.is_authenticated %}
+                <div class="p-4 text-center text-gray-300">
+                    Welcome, {{ current_user.first_name }} {{ current_user.last_name }}!
+                </div>
+            {% endif %}
+        </nav>
+        <div class="flex-1 p-4">
+            <h1 class="text-2xl font-bold">{% block header %}Form Header{% endblock %}</h1>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="mb-4">
+                        {% for message in messages %}
+                            <div class="bg-green-500 text-white p-2 rounded">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            <form method="post" action="{{ url_for(form_action) }}" class="mt-4">
+                {% block form_content %}{% endblock %}
+                <button type="submit" class="mt-4 bg-blue-500 text-white p-2 rounded">Submit</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

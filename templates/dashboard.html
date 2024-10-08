@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMyD0F1i3AtgHeEIdl1EyZl4dZ8g1+I64JwlD" crossorigin="anonymous">
+    <title>User Dashboard</title>
+</head>
+<body class="bg-gray-100">
+    <div class="flex">
+        <nav class="bg-gray-800 text-white w-64 h-screen">
+            <ul class="space-y-2 p-4">
+                <li>
+                    <a href="{{ url_for('add_truck_sample') }}" class="flex items-center p-2 hover:bg-gray-700">
+                        <i class="fas fa-truck mr-2"></i> Add Truck Sample
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('add_rake_sample') }}" class="flex items-center p-2 hover:bg-gray-700">
+                        <i class="fas fa-ship mr-2"></i> Add Rake Sample
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('view_truck_samples') }}" class="flex items-center p-2 hover:bg-gray-700">
+                        <i class="fas fa-eye mr-2"></i> View Truck Samples
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('view_rake_samples') }}" class="flex items-center p-2 hover:bg-gray-700">
+                        <i class="fas fa-eye mr-2"></i> View Rake Samples
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('view_users') }}" class="flex items-center p-2 hover:bg-gray-700">
+                        <i class="fas fa-users mr-2"></i> View Users
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('logout') }}" class="flex items-center p-2 hover:bg-gray-700">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="flex-1 p-4">
+            <h1 class="text-2xl font-bold">User Dashboard</h1>
+            {% if current_user.is_authenticated %}
+                <p class="mt-2 text-gray-700">Welcome, {{ current_user.first_name }} {{ current_user.last_name }}!</p>
+            {% else %}
+                <p class="mt-2 text-gray-700">Welcome to the user dashboard!</p>
+            {% endif %}
+
+            <div class="mt-4">
+                <h2 class="text-xl font-semibold">Truck Sample CPP Analysis Data</h2>
+                <table class="min-w-full border border-gray-300 mt-2">
+                    <thead>
+                        <tr>
+                            <th class="border px-4 py-2">Sample ID</th>
+                            <th class="border px-4 py-2">Inherent Moisture</th>
+                            <th class="border px-4 py-2">GCV (ADB)</th>
+                            <th class="border px-4 py-2">GCV (ARB)</th>
+                            <th class="border px-4 py-2">Total Moisture</th>
+                            <th class="border px-4 py-2">Volatile Matter</th>
+                            <th class="border px-4 py-2">Ash</th>
+                            <th class="border px-4 py-2">Fixed Carbon</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if truck_cpp_analysis %}
+                            {% for analysis in truck_cpp_analysis %}
+                            <tr class="text-center">
+                                <td class="border px-4 py-2">{{ analysis['sample_id'] }}</td>
+                                <td class="border px-4 py-2">{{ analysis['analysis_cpp']['inherent_moisture'] }}</td>
+                                <td class="border px-4 py-2">{{ analysis['analysis_cpp']['gcv_adb'] }}</td>
+                                <td class="border px-4 py-2">{{ analysis['analysis_cpp']['gcv_arb'] }}</td>
+                                <td class="border px-4 py-2">{{ analysis['analysis_cpp']['total_moisture'] }}</td>
+                                <td class="border px-4 py-2">{{ analysis['analysis_cpp']['volatile_matter'] }}</td>
+                                <td class="border px-4 py-2">{{ analysis['analysis_cpp']['ash'] }}</td>
+                                <td class="border px-4 py-2">{{ analysis['analysis_cpp']['fixed_carbon'] }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr><td colspan="8" class="text-center">No Truck CPP analysis data found.</td></tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-4">
+                <h2 class="text-xl font-semibold">Truck Sample CCR Analysis Data</h2>
+                <table class="min-w-full border border-gray-300 mt-2">
+                    <thead>
+                        <tr>
+                            <th class="border px-4 py-2">Sample ID</th>
+                            <th class="border px-4 py-2">Inherent Moisture</th>
+                            <th class="border px-4 py-2">GCV (ADB)</th>
+                            <th class="border px-4 py-2">GCV (ARB)</th>
+                            <th class="border px-4 py-2">Total Moisture</th>
+                            <th class="border px-4 py-2">Volatile Matter</th>
+                            <th class="border px-4 py-2">Ash</th>
+                            <th class="border px-4 py-2">Fixed Carbon</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if truck_ccr_analysis %}
+                            {% for analysis in truck_ccr_analysis %}
+                            <tr class="text-center">
+                                <td class="border px-4 py-2">{{ analysis['sample_id'] }}</td>
+                                <td class="border px-4 py-2">{{ analysis['analysis_ccr']['inherent_moisture'] }}</td>
+                                <td class="border px-4 py-2">{{ analysis['analysis_ccr']['gcv_adb'] }}</td>
+                                <td class="border px-4 py-2">{{ analysis['analysis_ccr']['gcv_arb'] }}</td>
+                                <td class="border px-4 py-2">{{ analysis['analysis_ccr']['total_moisture'] }}</td>
+                                <td class="border px-4 py-2">{{ analysis['analysis_ccr']['volatile_matter'] }}</td>
+                                <td class="border px-4 py-2">{{ analysis['analysis_ccr']['ash'] }}</td>
+                                <td class="border px-4 py-2">{{ analysis['analysis_ccr']['fixed_carbon'] }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr><td colspan="8" class="text-center">No Truck CCR analysis data found.</td></tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-4">
+                <h2 class="text-xl font-semibold">Rake Sample CPP Analysis Data</h2>
+                <table class="min-w-full border border-gray-300 mt-2">
+                    <thead>
+                        <tr>
+                            <th class="border px-4 py-2">Sample ID</th>
+                            <th class="border px-4 py-2">Inherent Moisture</th>
+                            <th class="border px-4 py-2">GCV (ADB)</th>
+                            <th class="border px-4 py-2">GCV (ARB)</th>
+                            <th class="border px-4 py-2">Total Moisture</th>
+                            <th class="border px-4 py-2">Volatile Matter</th>
+                            <th class="border px-4 py-2">Ash</th>
+                            <th class="border px-4 py-2">Fixed Carbon</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if rake_cpp_analysis %}
+                            {% for analysis in rake_cpp_analysis %}
+                            <tr class="text-center">
+                                <td class="border px-4 py-2">{{ analysis['sample_id'] }}</td>
+                                <td class="border px-4 py-2">{{ analysis['analysis_cpp']['inherent_moisture'] }}</td>
+                                <td class="border px-4 py-2">{{ analysis['analysis_cpp']['gcv_adb'] }}</td>
+                                <td class="border px-4 py-2">{{ analysis['analysis_cpp']['gcv_arb'] }}</td>
+                                <td class="border px-4 py-2">{{ analysis['analysis_cpp']['total_moisture'] }}</td>
+                                <td class="border px-4 py-2">{{ analysis['analysis_cpp']['volatile_matter'] }}</td>
+                                <td class="border px-4 py-2">{{ analysis['analysis_cpp']['ash'] }}</td>
+                                <td class="border px-4 py-2">{{ analysis['analysis_cpp']['fixed_carbon'] }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr><td colspan="8" class="text-center">No Rake CPP analysis data found.</td></tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-4">
+                <h2 class="text-xl font-semibold">Rake Sample CCR Analysis Data</h2>
+                <table class="min-w-full border border-gray-300 mt-2">
+                    <thead>
+                        <tr>
+                            <th class="border px-4 py-2">Sample ID</th>
+                            <th class="border px-4 py-2">Inherent Moisture</th>
+                            <th class="border px-4 py-2">GCV (ADB)</th>
+                            <th class="border px-4 py-2">GCV (ARB)</th>
+                            <th class="border px-4 py-2">Total Moisture</th>
+                            <th class="border px-4 py-2">Volatile Matter</th>
+                            <th class="border px-4 py-2">Ash</th>
+                            <th class="border px-4 py-2">Fixed Carbon</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if rake_ccr_analysis %}
+                            {% for analysis in rake_ccr_analysis %}
+                            <tr class="text-center">
+                                <td class="border px-4 py-2">{{ analysis['sample_id'] }}</td>
+                                <td class="border px-4 py-2">{{ analysis['analysis_ccr']['inherent_moisture'] }}</td>
+                                <td class="border px-4 py-2">{{ analysis['analysis_ccr']['gcv_adb'] }}</td>
+                                <td class="border px-4 py-2">{{ analysis['analysis_ccr']['gcv_arb'] }}</td>
+                                <td class="border px-4 py-2">{{ analysis['analysis_ccr']['total_moisture'] }}</td>
+                                <td class="border px-4 py-2">{{ analysis['analysis_ccr']['volatile_matter'] }}</td>
+                                <td class="border px-4 py-2">{{ analysis['analysis_ccr']['ash'] }}</td>
+                                <td class="border px-4 py-2">{{ analysis['analysis_ccr']['fixed_carbon'] }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr><td colspan="8" class="text-center">No Rake CCR analysis data found.</td></tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+                           

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>View Users</title>
+</head>
+<body class="bg-gray-100">
+    <div class="flex">
+        <nav class="bg-gray-800 text-white w-64 h-screen">
+            <ul class="space-y-2 p-4">
+                <li><a href="{{ url_for('add_truck_sample') }}" class="block p-2 hover:bg-gray-700">Add Truck Sample</a></li>
+                <li><a href="{{ url_for('add_rake_sample') }}" class="block p-2 hover:bg-gray-700">Add Rake Sample</a></li>
+                <li><a href="{{ url_for('view_truck_samples') }}" class="block p-2 hover:bg-gray-700">View Truck Samples</a></li>
+                <li><a href="{{ url_for('view_rake_samples') }}" class="block p-2 hover:bg-gray-700">View Rake Samples</a></li>
+                <li><a href="{{ url_for('view_users') }}" class="block p-2 hover:bg-gray-700">View Users</a></li>
+                
+                <!-- Other links -->
+                <li>
+                    <a href="{{ url_for('logout') }}" class="block p-2 hover:bg-gray-700">Logout</a>
+                </li>
+            </ul>
+        </nav>
+        
+        <div class="flex-1 p-4">
+            <h1 class="text-2xl font-bold">User List</h1>
+            <table class="min-w-full border-collapse border border-gray-200 mt-4">
+                <thead>
+                    <tr class="bg-gray-800 text-white">
+                        <th class="border border-gray-200 p-2">First Name</th>
+                        <th class="border border-gray-200 p-2">Last Name</th>
+                        <th class="border border-gray-200 p-2">Email</th>
+                        <th class="border border-gray-200 p-2">Mobile No</th>
+                        <th class="border border-gray-200 p-2">Department</th>
+                        <th class="border border-gray-200 p-2">Role</th>
+                        <th class="border border-gray-200 p-2">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td class="border border-gray-200 p-2">{{ user['first_name'] }}</td>
+                        <td class="border border-gray-200 p-2">{{ user['last_name'] }}</td>
+                        <td class="border border-gray-200 p-2">{{ user['email'] }}</td>
+                        <td class="border border-gray-200 p-2">{{ user['mobile_no'] }}</td>
+                        <td class="border border-gray-200 p-2">{{ user['department'] }}</td>
+                        <td class="border border-gray-200 p-2">{{ user['role'] }}</td>
+                        <td class="border border-gray-200 p-2">
+                            <a href="{{ url_for('edit_user', user_id=user['_id']) }}" class="text-blue-500">Edit</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
